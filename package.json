@@ -51,5 +51,10 @@
     "istanbul": "^1.0.0-alpha",
     "mocha": "^3.0.2",
     "rimraf": "^2.5.4"
+  },
+  "dependencies": {
+    "acorn": "^4.0.4",
+    "astravel": "^0.3.13",
+    "astring": "^0.8.0"
   }
 }

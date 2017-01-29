@@ -1,8 +1,8 @@
 import { assert } from 'chai';
-import awesomeFunction from '../src/awesomeModule';
+import convert from '../src';
 
-describe('Awesome test.', () => {
-  it('should test awesome function', () => {
-    assert(awesomeFunction(1, 1) === 2, 'Not awesome :(');
+describe('Simple test', () => {
+  it('should equals to 2', () => {
+    assert(1 + 1 === 2);
   });
 });
