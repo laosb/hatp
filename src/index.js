@@ -2,6 +2,7 @@ import { parse } from 'acorn'; // Should be replaced with our own version of aco
 import { attachComments } from 'astravel';
 import astring from 'astring';
 import './acorn_plugin';
+import generator from './astring_plugin';
 
 function convert(code, opts) {
   // Parse it into an AST and retrieve the list of comments
@@ -20,6 +21,7 @@ function convert(code, opts) {
     indent: '  ',
     lineEnd: '\n',
     comments: true,
+    generator,
   });
   return formattedCode;
 }
