@@ -26,7 +26,7 @@
   },
   "license": "MIT",
   "scripts": {
-    "prepublish": "npm i && npm test",
+    "prepublish": "npm test",
     "test": "node test/run.js",
     "pretest": "npm run build",
     "build": "npm run build:main && npm run build:walk && npm run build:loose && npm run build:bin",
