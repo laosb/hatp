@@ -25,7 +25,8 @@ function wordTransform(word) {
     case '抛出': case '丢出': case '甩出': return 'throw';
     case '尝试': case '试着': return 'try';
     case '传统变量': return 'var';
-    case '常量': case '钦定': return 'const';
+    case '变量': case '让': return 'let';
+    case '常量': case '钦定': case '钦点': return 'const';
     case '只要': return 'while';
     case '范畴': return 'with';
     case '新': case '新的': return 'new';
