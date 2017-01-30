@@ -18,7 +18,7 @@ function wordTransform(word) {
     case '否则': case '不然': return 'else';
     case '最后': case '最终': return 'finally';
     case '循环': return 'for';
-    case '函数': console.log('tokenized'); return 'function';
+    case '函数': return 'function';
     case '若': case '如果': return 'if';
     case '返回': return 'return';
     case '当': return 'switch';
@@ -51,13 +51,12 @@ export default function readWord() {
   // https://github.com/ternjs/acorn/blob/master/src/tokenize.js#L691-L699
   return function ha() {
     const word = this.readWord1();
-    console.log(word);
     const transformed = wordTransform(word);
     let type = tt.name;
     if (this.keywords.test(transformed)) {
       if (this.containsEsc) this.raiseRecoverable(this.start, `Escape sequence in keyword ${word}`);
       type = keywordTypes[transformed];
     }
-    return this.finishToken(type, word);
+    return this.finishToken(type, transformed);
   };
 }
