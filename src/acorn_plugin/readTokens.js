@@ -1,7 +1,7 @@
 import { tokTypes as tt } from 'acorn';
 import * as mapping from '../mapping';
 
-const { multiCompare, dots, lts, gts, slashs, eqs } = mapping;
+const { multiCompare, dots, lts, gts, slashs, eqs, pipes, mults, mergedNumbers } = mapping;
 // ### Token reading
 
 // This is the function that is called to fetch the next token. It
@@ -14,7 +14,7 @@ const { multiCompare, dots, lts, gts, slashs, eqs } = mapping;
 export function readTokenDot() {
   return function ha() {
     const next = this.input.charCodeAt(this.pos + 1);
-    if (next >= 65296 && next <= 65305) return this.readNumber(true);
+    if (multiCompare(mergedNumbers, next)) return this.readNumber(true);
     const next2 = this.input.charCodeAt(this.pos + 2);
     if (this.options.ecmaVersion >= 6 && multiCompare(dots, next, next2)) {
       this.pos += 3;
@@ -38,16 +38,16 @@ export function readTokenMultModuloExp() {
   return function ha(code) { // '%*'
     let next = this.input.charCodeAt(this.pos + 1);
     let size = 1;
-    let tokentype = (code === 215 || code === 65290) ? tt.star : tt.modulo;
+    let tokentype = multiCompare(mults, code) ? tt.star : tt.modulo;
 
     // exponentiation operator ** and **=
-    if (this.options.ecmaVersion >= 7 && (next === 215 || next === 65290)) {
+    if (this.options.ecmaVersion >= 7 && multiCompare(mults, next)) {
       size += 1;
       tokentype = tt.starstar;
       next = this.input.charCodeAt(this.pos + 2);
     }
 
-    if (next === 65309) return this.finishOp(tt.assign, size + 1);
+    if (multiCompare(eqs, code)) return this.finishOp(tt.assign, size + 1);
     return this.finishOp(tokentype, size);
   };
 }
@@ -55,16 +55,18 @@ export function readTokenMultModuloExp() {
 export function readTokenPipeAmp() {
   return function ha(code) { // '|&'
     const next = this.input.charCodeAt(this.pos + 1);
-    if (next === code) return this.finishOp(code === 65372 ? tt.logicalOR : tt.logicalAND, 2);
-    if (next === 65309) return this.finishOp(tt.assign, 2);
-    return this.finishOp(code === 65372 ? tt.bitwiseOR : tt.bitwiseAND, 1);
+    if (next === code) {
+      return this.finishOp(multiCompare(pipes, code) ? tt.logicalOR : tt.logicalAND, 2);
+    }
+    if (multiCompare(eqs, code)) return this.finishOp(tt.assign, 2);
+    return this.finishOp(multiCompare(pipes, code) ? tt.bitwiseOR : tt.bitwiseAND, 1);
   };
 }
 
 export function readTokenCaret() {
   return function ha() { // '^'
     const next = this.input.charCodeAt(this.pos + 1);
-    if (next === 65309) return this.finishOp(tt.assign, 2);
+    if (multiCompare(eqs, next)) return this.finishOp(tt.assign, 2);
     return this.finishOp(tt.bitwiseXOR, 1);
   };
 }
@@ -75,7 +77,7 @@ export function readTokenPlusMin() {
     if (next === code) {
       return this.finishOp(tt.incDec, 2);
     }
-    if (next === 65309) return this.finishOp(tt.assign, 2);
+    if (multiCompare(eqs, next)) return this.finishOp(tt.assign, 2);
     return this.finishOp(tt.plusMin, 1);
   };
 }
@@ -100,7 +102,8 @@ export function readTokenEqExcl() {
   return function ha(code) { // '=!'
     const next = this.input.charCodeAt(this.pos + 1);
     if (multiCompare(eqs, next)) {
-      return this.finishOp(tt.equality, this.input.charCodeAt(this.pos + 2) === 65309 ? 3 : 2);
+      return this.finishOp(tt.equality,
+        multiCompare(eqs, this.input.charCodeAt(this.pos + 2)) ? 3 : 2);
     }
     if (
       multiCompare(eqs, code) && multiCompare(gts, next) && this.options.ecmaVersion >= 6

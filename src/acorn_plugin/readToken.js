@@ -18,7 +18,7 @@ export default function readToken(nextMethod) {
     } else if (checkInArray(code, mapping.pipes, mapping.amps)) {
       return this.readFullTokenPipeAmp(code);
     } else if (checkInArray(code, mapping.carets)) {
-      return this.readFullTokenCarts(code);
+      return this.readFullTokenCaret(code);
     } else if (checkInArray(code, mapping.plus, mapping.minus)) {
       return this.readFullTokenPlusMin(code);
     } else if (checkInArray(code, mapping.eqs, mapping.excls)) {
