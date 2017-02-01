@@ -2,7 +2,8 @@
 // keywordTypes needs to be exposed to us: https://github.com/ternjs/acorn/pull/495
 // We need a map to map Chinese keywords to western ones.
 
-import { tokTypes as tt, keywordTypes } from 'acorn';
+import { tokTypes as tt } from 'acorn';
+import { types as keywordTypes } from './tokentype';
 
 function wordTransform(word) {
   // Transform a Chinese keyword to corresponding one.
