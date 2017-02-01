@@ -3,7 +3,7 @@
 /* eslint-disable no-param-reassign, no-console */
 /* eslint import/no-extraneous-dependencies: ["error", {"devDependencies": true}] */
 
-const commander = require('commander');
+const cmder = require('commander');
 const glob = require('glob');
 const packageJson = require('../package.json');
 const outputFileSync = require('output-file-sync');
@@ -82,7 +82,7 @@ function batchTp(commander, filenames) {
   filenames.forEach(handle);
 }
 
-commander
+cmder
   .version(packageJson.version)
   .option('-g, --glob [glob]', 'The glob you want to use', '**')
   .option('-e, --extension [extension]', 'File extensions to compile', 'ha')
@@ -91,6 +91,6 @@ commander
   .option('-c, --copy-files', 'Copy files which don\'t need to be compiled')
   .parse(process.argv);
 
-const filenames = glob.sync(commander.glob);
+const filenames = glob.sync(cmder.glob);
 
-batchTp(commander, filenames);
+batchTp(cmder, filenames);
