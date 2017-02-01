@@ -1,13 +1,7 @@
 import { tokTypes as tt } from 'acorn';
+import * as mapping from '../mapping';
 
-const makeCodeAt = array => array.map(p => p.charCodeAt());
-const multiCompare = (array, ...data) => array.some(key => data.every(d => d === key));
-
-const dots = makeCodeAt(['。', '．']);
-const lts = makeCodeAt(['《', '＜']);
-const gts = makeCodeAt(['》', '＞']);
-const slashs = makeCodeAt(['、', '／']);
-
+const { multiCompare, dots, lts, gts, slashs, eqs } = mapping;
 // ### Token reading
 
 // This is the function that is called to fetch the next token. It
@@ -17,7 +11,7 @@ const slashs = makeCodeAt(['、', '／']);
 //
 // All in the name of speed.
 //
-export function readTokenDot(inner) {
+export function readTokenDot() {
   return function ha() {
     const next = this.input.charCodeAt(this.pos + 1);
     if (next >= 65296 && next <= 65305) return this.readNumber(true);
@@ -26,22 +20,22 @@ export function readTokenDot(inner) {
       this.pos += 3;
       return this.finishToken(tt.ellipsis);
     }
-    return inner.call(this);
+    this.pos += 1;
+    return this.finishToken(tt.dot);
   };
 }
 
-export function readTokenSlash(inner) {
+export function readTokenSlash() {
   return function ha() { // '/'
     const next = this.input.charCodeAt(this.pos + 1);
     if (this.exprAllowed) { this.pos += 1; return this.readRegexp(); }
     if (multiCompare(slashs, next)) return this.finishOp(tt.assign, 2);
-    return inner.call(this);
+    return this.finishOp(tt.slash, 1);
   };
 }
 
-export function readTokenMultModuloExp(inner) {
+export function readTokenMultModuloExp() {
   return function ha(code) { // '%*'
-    if (!(code === 215 || code === 65290)) return inner.call(this, code);
     let next = this.input.charCodeAt(this.pos + 1);
     let size = 1;
     let tokentype = (code === 215 || code === 65290) ? tt.star : tt.modulo;
@@ -58,9 +52,8 @@ export function readTokenMultModuloExp(inner) {
   };
 }
 
-export function readTokenPipeAmp(inner) {
+export function readTokenPipeAmp() {
   return function ha(code) { // '|&'
-    if (!(code === 65372 || code === 65286)) return inner.call(this, code);
     const next = this.input.charCodeAt(this.pos + 1);
     if (next === code) return this.finishOp(code === 65372 ? tt.logicalOR : tt.logicalAND, 2);
     if (next === 65309) return this.finishOp(tt.assign, 2);
@@ -68,17 +61,16 @@ export function readTokenPipeAmp(inner) {
   };
 }
 
-export function readTokenCaret(inner) {
+export function readTokenCaret() {
   return function ha() { // '^'
     const next = this.input.charCodeAt(this.pos + 1);
     if (next === 65309) return this.finishOp(tt.assign, 2);
-    return inner.call(this);
+    return this.finishOp(tt.bitwiseXOR, 1);
   };
 }
 
-export function readTokenPlusMin(inner) {
+export function readTokenPlusMin() {
   return function ha(code) { // '+-'
-    if (!(code === 65291 || code === 65293 || code === 8212)) return inner.call(this, code);
     const next = this.input.charCodeAt(this.pos + 1);
     if (next === code) {
       return this.finishOp(tt.incDec, 2);
@@ -88,12 +80,8 @@ export function readTokenPlusMin(inner) {
   };
 }
 
-export function readTokenLtGt(inner) {
-  const concatenated = lts.concat(gts);
+export function readTokenLtGt() {
   return function ha(code) { // '<>'
-    if (concatenated.indexOf(code) < 0) {
-      return inner.call(this, code);
-    }
     const next = this.input.charCodeAt(this.pos + 1);
     let size = 1;
     if (next === code) {
@@ -108,17 +96,18 @@ export function readTokenLtGt(inner) {
   };
 }
 
-export function readTokenEqExcl(inner) {
+export function readTokenEqExcl() {
   return function ha(code) { // '=!'
-    if (code !== 65309 && code !== 65281) return inner.call(this, code);
     const next = this.input.charCodeAt(this.pos + 1);
-    if (next === 65309) {
+    if (multiCompare(eqs, next)) {
       return this.finishOp(tt.equality, this.input.charCodeAt(this.pos + 2) === 65309 ? 3 : 2);
     }
-    if (code === 65309 && multiCompare(gts, next) && this.options.ecmaVersion >= 6) { // '=>'
+    if (
+      multiCompare(eqs, code) && multiCompare(gts, next) && this.options.ecmaVersion >= 6
+    ) { // '=>'
       this.pos += 2;
       return this.finishToken(tt.arrow);
     }
-    return this.finisOp(code === 65309 ? tt.eq : tt.prefix, 1);
+    return this.finishOp(multiCompare(eqs, code) ? tt.eq : tt.prefix, 1);
   };
 }

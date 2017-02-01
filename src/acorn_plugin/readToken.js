@@ -1,9 +1,29 @@
 /* eslint-disable no-plusplus */
 
 import { tokTypes as tt } from 'acorn';
+import * as mapping from '../mapping';
+
+const checkInArray = mapping.checkInArray;
 
 export default function readToken(nextMethod) {
   return function ha(code) {
+    if (checkInArray(code, mapping.dots)) {
+      return this.readFullTokenDot(code);
+    } else if (checkInArray(code, mapping.lts, mapping.gts)) {
+      return this.readFullTokenLtGt(code);
+    } else if (checkInArray(code, mapping.slashs)) {
+      return this.readFullTokenSlash(code);
+    } else if (checkInArray(code, mapping.mults, mapping.modulos)) {
+      return this.readFullTokenMultModuloExp(code);
+    } else if (checkInArray(code, mapping.pipes, mapping.amps)) {
+      return this.readFullTokenPipeAmp(code);
+    } else if (checkInArray(code, mapping.carets)) {
+      return this.readFullTokenCarts(code);
+    } else if (checkInArray(code, mapping.plus, mapping.minus)) {
+      return this.readFullTokenPlusMin(code);
+    } else if (checkInArray(code, mapping.eqs, mapping.excls)) {
+      return this.readFullTokenEqExcl(code);
+    }
     // https://github.com/ternjs/acorn/blob/master/src/tokenize.js#L313-L323
     switch (code) {
       case 65288: ++this.pos; return this.finishToken(tt.parenL);

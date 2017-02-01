@@ -1,4 +1,5 @@
 import { plugins } from 'acorn';
+import * as readTokens from './readTokens';
 import readToken from './readToken';
 import readString from './readString';
 import readWord from './readWord';
@@ -11,4 +12,12 @@ plugins.halang = function halangPlugin(parser) {
   parser.extend('readWord', readWord);
   parser.extend('parseStatement', parseStatement);
   parser.extend('parseFromImport', parseFromImport);
+  parser.extend('readFullTokenCaret', readTokens.readTokenCaret);
+  parser.extend('readFullTokenDot', readTokens.readTokenDot);
+  parser.extend('readFullTokenEqExcl', readTokens.readTokenEqExcl);
+  parser.extend('readFullTokenLtGt', readTokens.readTokenLtGt);
+  parser.extend('readFullTokenMultModuloExp', readTokens.readTokenMultModuloExp);
+  parser.extend('readFullTokenPipeAmp', readTokens.readTokenPipeAmp);
+  parser.extend('readFullTokenPlusMin', readTokens.readTokenPlusMin);
+  parser.extend('readFullTokenSlash', readTokens.readTokenSlash);
 };
