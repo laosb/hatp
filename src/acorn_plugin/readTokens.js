@@ -10,65 +10,69 @@ import { tokTypes as tt } from 'acorn';
 // All in the name of speed.
 //
 export function readToken_dot(inner) {
-  return function () {
+  return function ha() {
     const next = this.input.charCodeAt(this.pos + 1);
-    if (next >= 48 && next <= 57) return this.readNumber(true);
+    if (next >= 65296 && next <= 65305) return this.readNumber(true);
     const next2 = this.input.charCodeAt(this.pos + 2);
-    if (this.options.ecmaVersion >= 6 && next === 46 && next2 === 46) { // 46 = dot '.'
+    if (this.options.ecmaVersion >= 6 &&
+      ((next === 12290 && next2 === 12290) || (next === 65294 || next2 === 65294))
+      // 。 = 12290，． = 65294
+      ) {
       this.pos += 3;
       return this.finishToken(tt.ellipsis);
     }
-    ++this.pos;
-    return this.finishToken(tt.dot);
+    return inner.call(this);
   };
 }
 
 export function readToken_slash(inner) {
-  return function ()  { // '/'
+  return function ha() { // '/'
     const next = this.input.charCodeAt(this.pos + 1);
     if (this.exprAllowed) { ++this.pos; return this.readRegexp(); }
-    if (next === 61) return this.finishOp(tt.assign, 2);
-    return this.finishOp(tt.slash, 1);
+    if (next === 12289 || next === 65295) return this.finishOp(tt.assign, 2);
+    return inner.call(this);
   };
 }
 
 export function readToken_mult_modulo_exp(inner) {
-  return function (code)  { // '%*'
+  return function ha(code)  { // '%*'
+    if (!(code === 215 || code === 65290)) return inner.call(this, code);
     let next = this.input.charCodeAt(this.pos + 1);
     let size = 1;
-    let tokentype = code === 42 ? tt.star : tt.modulo;
+    let tokentype = (code === 215 || code === 65290) ? tt.star : tt.modulo;
 
     // exponentiation operator ** and **=
-    if (this.options.ecmaVersion >= 7 && next === 42) {
+    if (this.options.ecmaVersion >= 7 && (next === 215 || next === 65290)) {
       ++size;
       tokentype = tt.starstar;
       next = this.input.charCodeAt(this.pos + 2);
     }
 
-    if (next === 61) return this.finishOp(tt.assign, size + 1);
+    if (next === 65309) return this.finishOp(tt.assign, size + 1);
     return this.finishOp(tokentype, size);
   };
 }
 
 export function readToken_pipe_amp(inner) {
-  return function (code)  { // '|&'
+  return function ha(code) { // '|&'
+    if (!(code === 65372 || code === 65286)) return inner.call(this, code);
     const next = this.input.charCodeAt(this.pos + 1);
-    if (next === code) return this.finishOp(code === 124 ? tt.logicalOR : tt.logicalAND, 2);
-    if (next === 61) return this.finishOp(tt.assign, 2);
-    return this.finishOp(code === 124 ? tt.bitwiseOR : tt.bitwiseAND, 1);
+    if (next === code) return this.finishOp(code === 65372 ? tt.logicalOR : tt.logicalAND, 2);
+    if (next === 65309) return this.finishOp(tt.assign, 2);
+    return this.finishOp(code === 65372 ? tt.bitwiseOR : tt.bitwiseAND, 1);
   };
 }
 
 export function readToken_caret(inner) {
-  return function ()  { // '^'
+  return function ha() { // '^'
     const next = this.input.charCodeAt(this.pos + 1);
-    if (next === 61) return this.finishOp(tt.assign, 2);
-    return this.finishOp(tt.bitwiseXOR, 1);
+    if (next === 65309) return this.finishOp(tt.assign, 2);
+    return inner.call(this);
   };
 }
 
 export function readToken_plus_min(inner) {
-  return function (code)  { // '+-'
+  return function ha(code)  { // '+-'
     const next = this.input.charCodeAt(this.pos + 1);
     if (next === code) {
       if (next == 45 && this.input.charCodeAt(this.pos + 2) == 62 &&
@@ -80,13 +84,13 @@ export function readToken_plus_min(inner) {
       }
       return this.finishOp(tt.incDec, 2);
     }
-    if (next === 61) return this.finishOp(tt.assign, 2);
+    if (next === 65309) return this.finishOp(tt.assign, 2);
     return this.finishOp(tt.plusMin, 1);
   };
 }
 
 export function readToken_lt_gt(inner) {
-  return function (code)  { // '<>'
+  return function ha(code) { // '<>'
     const next = this.input.charCodeAt(this.pos + 1);
     let size = 1;
     if (next === code) {
@@ -108,13 +112,14 @@ export function readToken_lt_gt(inner) {
 }
 
 export function readToken_eq_excl(inner) {
-  return function (code)  { // '=!'
+  return function ha(code) { // '=!'
+    if (code !== 65309 && code !== 65281) return inner.call(this, code);
     const next = this.input.charCodeAt(this.pos + 1);
-    if (next === 61) return this.finishOp(tt.equality, this.input.charCodeAt(this.pos + 2) === 61 ? 3 : 2);
-    if (code === 61 && next === 62 && this.options.ecmaVersion >= 6) { // '=>'
+    if (next === 65309) return this.finishOp(tt.equality, this.input.charCodeAt(this.pos + 2) === 65309 ? 3 : 2);
+    if (code === 65309 && (next === 65310 || next === 12299) && this.options.ecmaVersion >= 6) { // '=>'
       this.pos += 2;
       return this.finishToken(tt.arrow);
     }
-    return this.finisOp(code === 61 ? tt.eq : tt.prefix, 1);
+    return this.finisOp(code === 65309 ? tt.eq : tt.prefix, 1);
   };
 }
