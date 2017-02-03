@@ -3,7 +3,10 @@
 import { tokTypes as tt } from 'acorn';
 import * as mapping from '../mapping';
 
-const checkInArray = mapping.checkInArray;
+const { checkInArray, makeCodeAt } = mapping;
+const x = makeCodeAt(['x', 'X', 'ｘ', 'Ｘ']);
+const o = makeCodeAt(['o', 'O', 'ｏ', 'Ｏ']);
+const b = makeCodeAt(['b', 'B', 'ｂ', 'Ｂ']);
 
 export default function readToken(nextMethod) {
   return function ha(code) {
@@ -23,6 +26,18 @@ export default function readToken(nextMethod) {
       return this.readFullTokenPlusMin(code);
     } else if (checkInArray(code, mapping.eqs, mapping.excls)) {
       return this.readFullTokenEqExcl(code);
+    } else if (checkInArray(code, mapping.numbers[0])) {
+      const next = this.input.charCodeAt(this.pos + 1);
+      if (checkInArray(next, x)) return this.readRadixNumber(16); // '0x', '0X' - hex number
+      if (this.options.ecmaVersion >= 6) {
+        if (checkInArray(next, o)) return this.readRadixNumber(8); // '0o', '0O' - octal number
+        if (checkInArray(next, b)) return this.readRadixNumber(2); // '0b', '0B' - binary number
+      }
+      return this.readNumber(false);
+      // Anything else beginning with a digit is an integer, octal
+      // number, or float.
+    } else if (checkInArray(code, mapping.mergedNumbers)) {
+      return this.readNumber(false);
     }
     // https://github.com/ternjs/acorn/blob/master/src/tokenize.js#L313-L323
     switch (code) {

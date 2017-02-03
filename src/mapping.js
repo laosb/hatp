@@ -1,5 +1,5 @@
-const makeCodeAt = array => array.map(p => p.charCodeAt());
-const makeCodeAtRecursion = array => array.map(p =>
+export const makeCodeAt = array => array.map(p => p.charCodeAt());
+export const makeCodeAtRecursion = array => array.map(p =>
     (p instanceof Array ? makeCodeAtRecursion(p) : p.charCodeAt()));
 
 export const multiCompare = (array, ...data) => array.some(key => data.every(d => d === key));
@@ -35,3 +35,39 @@ export let mergedNumbers = []; // eslint-disable-line import/no-mutable-exports
 numbers.forEach((n) => {
   mergedNumbers = mergedNumbers.concat(n);
 });
+const mapping = (() => {
+  const table = {
+    '.': dots,
+    '<': lts,
+    '>': gts,
+    '/': slashs,
+    '*': mults,
+    '%': modulos,
+    '^': carets,
+    '+': plus,
+    '-': minus,
+    '=': eqs,
+    '!': excls,
+    '&': amps,
+    '|': pipes,
+    /* eslint quote-props: 0 */
+    '0': numbers[0],
+    '1': numbers[1],
+    '2': numbers[2],
+    '3': numbers[3],
+    '4': numbers[4],
+    '5': numbers[5],
+    '6': numbers[6],
+    '7': numbers[7],
+    '8': numbers[8],
+    '9': numbers[9],
+  };
+  const w = {};
+  Object.keys((key) => {
+    table[key].forEach((d) => {
+      w[d] = key;
+    });
+  });
+  return w;
+})();
+export default mapping;
