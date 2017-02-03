@@ -1,4 +1,4 @@
-import { tokTypes as tt, keywords as keywordTypes } from 'acorn';
+import { tokTypes as tt, keywordTypes } from 'acorn';
 
 function wordTransform(word) {
   // Transform a Chinese keyword to corresponding one.
