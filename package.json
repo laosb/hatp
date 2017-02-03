@@ -1,6 +1,6 @@
 {
   "name": "hatp",
-  "version": "0.0.2",
+  "version": "0.0.6",
   "description": "Transpile HaLang to Javascript.",
   "main": "./lib/index.js",
   "scripts": {
@@ -15,7 +15,8 @@
   },
   "files": [
     "lib",
-    "src"
+    "src",
+    "bin"
   ],
   "repository": {
     "type": "git",
@@ -42,28 +43,27 @@
     "babel-preset-es2015": "^6.14.0",
     "babel-preset-stage-2": "^6.13.0",
     "chai": "^3.5.0",
-    "commander": "^2.9.0",
     "cross-env": "^3.0.0",
     "eslint": "^3.6.0",
     "eslint-config-airbnb": "^13.0.0",
     "eslint-plugin-import": "^2.0.0",
     "eslint-plugin-jsx-a11y": "^2.2.2",
     "eslint-plugin-react": "^6.3.0",
-    "fs": "0.0.1-security",
-    "fs-readdir-recursive": "^1.0.0",
-    "glob": "^7.1.1",
     "istanbul": "^1.0.0-alpha",
     "mocha": "^3.0.2",
-    "output-file-sync": "^1.1.2",
-    "path": "^0.12.7",
     "rimraf": "^2.5.4"
   },
   "dependencies": {
-    "acorn": "^4.0.4",
+    "acorn": "^4.0.7",
     "astravel": "^0.3.13",
-    "astring": "^0.8.0"
+    "astring": "^0.8.0",
+    "commander": "^2.9.0",
+    "fs-readdir-recursive": "^1.0.0",
+    "glob": "^7.1.1",
+    "output-file-sync": "^1.1.2",
+    "path": "^0.12.7"
   },
   "bin": {
-    "hatp": "./bin/hatp"
+    "hatp": "bin/hatp"
   }
 }
