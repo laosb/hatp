@@ -23,21 +23,17 @@ export function readInt() {
     for (let i = 0, e = len == null ? Infinity : len; i < e; i += 1) {
       const code = this.input.charCodeAt(this.pos);
       let val;
-      /* eslint-disable */
-      if (code >= 97 && code <= 122) val = code - 97 + 10 // a
-      else if (code >= 65 && code <= 90) val = code - 65 + 10 // A
-      else if (code >= 48 && code <= 57) val = code - 48 // 0-9
+      /* eslint-disable no-mixed-operators, no-plusplus, brace-style */
+      if (code >= 97 && code <= 122) val = code - 97 + 10; // a
+      else if (code >= 65 && code <= 90) val = code - 65 + 10; // A
+      else if (code >= 48 && code <= 57) val = code - 48; // 0-9
       else if (code >= 65345 && code <= 65370) val = code - 65345 + 10; // ａ
       else if (code >= 65313 && code <= 65338) val = code - 65313 + 10; // Ａ
       else if (multiCompare(mapping.mergedNumbers, code)) { // 0-9
         for (let j = 0; j < mapping.numbers.length; j++) {
-          if (mapping.numbers[j].indexOf(code) >= 0) {
-            val = j;
-            break;
-          }
+          if (mapping.numbers[j].indexOf(code) >= 0) { val = j; break; }
         }
       }
-      /* eslint-enable */
       else val = Infinity;
       if (val >= radix) break;
       this.pos += 1;
