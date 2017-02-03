@@ -19,4 +19,29 @@ describe('语句级标点处理（pp.readToken）', () => {
     const targetJs = "console.log('『excited！』');\n";
     assert(convert(haCode, config) === targetJs);
   });
+  it('全角运算符转换', () => {
+    const haCode = 'console.log（1＝＝＝1＾2）；';
+    const targetJs = 'console.log(1 === 1 ^ 2);\n';
+    assert(convert(haCode, config) === targetJs);
+  });
+  it('数字转换（二进制）', () => {
+    const haCode = 'console.log（０ｂ１１１０１００１）；';
+    const targetJs = 'console.log(233);\n';
+    assert(convert(haCode, config) === targetJs);
+  });
+  it('数字转换（八进制）', () => {
+    const haCode = 'console.log（０ｏ１１）；';
+    const targetJs = 'console.log(9);\n';
+    assert(convert(haCode, config) === targetJs);
+  });
+  it('数字转换（十六进制）', () => {
+    const haCode = 'console.log（０ｘ２ａ）；';
+    const targetJs = 'console.log(42);\n';
+    assert(convert(haCode, config) === targetJs);
+  });
+  it('数字转换（小数）', () => {
+    const haCode = 'console.log（３．１４１５９２６）；';
+    const targetJs = 'console.log(3.1415926);\n';
+    assert(convert(haCode, config) === targetJs);
+  });
 });
