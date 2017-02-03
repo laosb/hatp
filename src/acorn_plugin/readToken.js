@@ -55,7 +55,7 @@ export default function readToken(nextMethod) {
       case 65311: ++this.pos; return this.finishToken(tt.question);
 
       // https://github.com/ternjs/acorn/blob/master/src/tokenize.js#L343-L344
-      // To make this work, we need to modify readString a little bit. See below.
+      // To make this work, we need to modify readString a little bit. See readString.js.
       case 12300: return this.readString(12301); // Start with 「, so end with 」.
       case 12302: return this.readString(12303); // Start with 『, so end with 』.
       case 8216: return this.readString(8217); // Start with ‘, so end with ’.
