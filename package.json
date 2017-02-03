@@ -15,7 +15,8 @@
   },
   "files": [
     "lib",
-    "src"
+    "src",
+    "bin"
   ],
   "repository": {
     "type": "git",
@@ -64,6 +65,6 @@
     "astring": "^0.8.0"
   },
   "bin": {
-    "hatp": "./bin/hatp"
+    "hatp": "bin/hatp"
   }
 }
