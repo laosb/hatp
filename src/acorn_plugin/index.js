@@ -6,8 +6,10 @@ import * as readNumbers from './readNumbers';
 import readWord from './readWord';
 import parseStatement from './parseStatement';
 import parseFromImport from './parseFromImport';
+import finishOp from './finishOp';
 
 plugins.halang = function halangPlugin(parser) {
+  parser.extend('finishOp', finishOp);
   parser.extend('readToken', readToken);
   parser.extend('readString', readString);
   parser.extend('readWord', readWord);

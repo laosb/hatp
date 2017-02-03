@@ -63,7 +63,7 @@ const mapping = (() => {
     '9': numbers[9],
   };
   const w = {};
-  Object.keys((key) => {
+  Object.keys(table).forEach((key) => {
     table[key].forEach((d) => {
       w[d] = key;
     });
