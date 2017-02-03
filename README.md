@@ -1,6 +1,7 @@
 # hatp
 
 [![Build Status](https://travis-ci.org/laosb/hatp.svg?branch=master)](https://travis-ci.org/laosb/hatp)
+[![npm Version](https://img.shields.io/npm/v/hatp.svg)](https://npmjs.com/package/hatp)
 
 The transpiler which transpile [HaLang](https://laosb.github.io/halang) to Javascript. Currently not for prod.
 
