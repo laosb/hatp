@@ -19,7 +19,7 @@ export const excls = makeCodeAt(['！']);
 export const amps = makeCodeAt(['＆']);
 export const pipes = makeCodeAt(['｜']);
 export const numbers = makeCodeAtRecursion([
-  ['０', '零'],
+  ['０', '零', '〇'],
   ['１', '壹'],
   ['２', '贰'],
   ['３', '叁'],
