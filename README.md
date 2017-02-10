@@ -10,7 +10,12 @@ This package exports a `convert` function as default.
 
 ```js
 import convert from 'hatp';
-convert(`钦定 蛤 = “主席”；`);
+const config = {
+  ha: {}, // Config for ha the acorn plugin. If none, use `true`.
+  acorn: { sourceType: 'module' }, // Config for acorn.
+  astring: {}, // Config for astring.
+};
+convert(`钦定 蛤 = “主席”；`, config);
 ```
 
 You can also use this package in CLI:
