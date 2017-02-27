@@ -19,16 +19,16 @@ export const excls = makeCodeAt(['！']);
 export const amps = makeCodeAt(['＆']);
 export const pipes = makeCodeAt(['｜']);
 export const numbers = makeCodeAtRecursion([
-  ['０', '零', '〇'],
-  ['１', '壹'],
-  ['２', '贰'],
-  ['３', '叁'],
-  ['４', '肆'],
-  ['５', '伍'],
-  ['６', '陆'],
-  ['７', '柒'],
-  ['８', '捌'],
-  ['９', '玖'],
+  ['0', '０', '零', '〇'],
+  ['1', '１', '壹'],
+  ['2', '２', '贰'],
+  ['3', '３', '叁'],
+  ['4', '４', '肆'],
+  ['5', '５', '伍'],
+  ['6', '６', '陆'],
+  ['7', '７', '柒'],
+  ['8', '８', '捌'],
+  ['9', '９', '玖'],
 ]);
 
 export let mergedNumbers = []; // eslint-disable-line import/no-mutable-exports
