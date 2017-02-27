@@ -3,6 +3,14 @@ import convert from '../src';
 
 const config = { acorn: { sourceType: 'module' } };
 
+describe('普通 JavaScript 代码', () => {
+  it('简易测试', () => {
+    const haCode = '(() => {console.log("Testing JavaScript. 1 + 1 = ", 1 + 1);})()';
+    const targetJs = '(() => {\n  console.log("Testing JavaScript. 1 + 1 = ", 1 + 1);\n})();\n';
+    assert(convert(haCode, config) === targetJs);
+  });
+});
+
 describe('语句级标点处理（pp.readToken）', () => {
   it('：；', () => {
     const haCode = 'console.log({ key：value })；';
