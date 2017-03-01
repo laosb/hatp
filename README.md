@@ -4,6 +4,7 @@
 [![npm Version](https://img.shields.io/npm/v/hatp.svg)](https://npmjs.com/package/hatp)
 
 The transpiler which transpile [HaLang](https://laosb.github.io/halang) to Javascript, based on Acorn and Astring.
+
 ## Usage
 
 This package exports a `convert` function as default.
@@ -25,4 +26,8 @@ $ hatp -o built/
 测试.ha -> built/测试.js
 ```
 
-See more CLI info by `hatp -h`.
+See more CLI usage by `hatp -h`.
+
+## License
+
+MIT.
