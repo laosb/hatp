@@ -11,6 +11,19 @@ describe('普通 JavaScript 代码', () => {
   });
 });
 
+describe('注释', () => {
+  it('注：', () => {
+    const haCode = 'console.log("测试"); 注：这是个测试。';
+    const targetJs = 'console.log("测试"); //这是个测试。\n';
+    assert(convert(haCode, config) === targetJs);
+  });
+  it('//', () => {
+    const haCode = 'console.log("测试"); //这是个测试。';
+    const targetJs = 'console.log("测试"); //这是个测试。\n';
+    assert(convert(haCode, config) === targetJs);
+  });
+});
+
 describe('语句级标点处理（pp.readToken）', () => {
   it('：；', () => {
     const haCode = 'console.log({ key：value })；';
