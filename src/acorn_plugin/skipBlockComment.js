@@ -1,4 +1,4 @@
-// eslint-disable
+/* eslint-disable */
 export default function skipSpace() {
   // https://github.com/ternjs/acorn/blob/master/src/tokenize.js#L100-L116
   return function ha(endSign) {
