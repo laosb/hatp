@@ -1,10 +1,11 @@
 export default function skipSpace() {
   // https://github.com/ternjs/acorn/blob/master/src/tokenize.js#L100-L116
   return function ha(endSign) {
+    const endS = endSign ? endSign : '*/';
     let startLoc = this.options.onComment && this.curPosition();
-    let start = this.pos, end = this.input.indexOf(endSign ? endSign : '*/', this.pos += 2);
+    let start = this.pos, end = this.input.indexOf(endS, this.pos += endS.length);
     if (end === -1) this.raise(this.pos - 2, "Unterminated comment")
-    this.pos = end + 2
+    this.pos = end + endS.length
     if (this.options.locations) {
       lineBreakG.lastIndex = start
       let match
