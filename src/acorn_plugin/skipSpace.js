@@ -30,6 +30,21 @@ export default function skipSpace() {
               break loop
           }
           break
+        case 27880: // '注'
+          switch (this.input.charCodeAt(this.pos + 1)) {
+            case 37322: // '释'
+              if (this.input.charAt(this.pos + 2) === '：') {
+                this.skipBlockComment();
+              } else {
+                break loop;
+              }
+              break
+            case 65306: // '：'
+              this.skipLineComment(2)
+              break
+            default:
+              break loop
+          }
         default:
           if (ch > 8 && ch < 14 || ch >= 5760 && nonASCIIwhitespace.test(String.fromCharCode(ch))) {
             ++this.pos
