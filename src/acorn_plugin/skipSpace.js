@@ -34,7 +34,7 @@ export default function skipSpace() {
           switch (this.input.charCodeAt(this.pos + 1)) {
             case 37322: // '释'
               if (this.input.charAt(this.pos + 2) === '：') {
-                this.skipBlockComment();
+                this.skipBlockComment('以上。');
               } else {
                 break loop;
               }
