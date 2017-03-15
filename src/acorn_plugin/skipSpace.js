@@ -1,4 +1,8 @@
-/* eslint-disable */
+/* eslint-disable */ // Should remove this once I work home.
+
+// Workaround
+const nonASCIIwhitespace = /[\u1680\u180e\u2000-\u200a\u202f\u205f\u3000\ufeff]/;
+
 export default function skipSpace() {
   // https://github.com/ternjs/acorn/blob/8de357451e72c8a67acdb8a63353b577735dc7b6/src/tokenize.js#L134-L172
   return function ha() {
