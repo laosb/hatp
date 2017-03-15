@@ -1,4 +1,6 @@
-/* eslint-disable */
+/* eslint-disable */ // Should remove this once I work home.
+import { lineBreakG } from 'acorn';
+
 export default function skipSpace() {
   // https://github.com/ternjs/acorn/blob/master/src/tokenize.js#L100-L116
   return function ha(endSign) {
