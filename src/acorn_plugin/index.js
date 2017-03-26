@@ -7,6 +7,8 @@ import readWord from './readWord';
 import parseStatement from './parseStatement';
 import parseFromImport from './parseFromImport';
 import finishOp from './finishOp';
+import skipBlockComment from './skipBlockComment';
+import skipSpace from './skipSpace';
 
 plugins.halang = function halangPlugin(parser) {
   parser.extend('finishOp', finishOp);
@@ -26,4 +28,6 @@ plugins.halang = function halangPlugin(parser) {
   parser.extend('readInt', readNumbers.readInt);
   parser.extend('readNumber', readNumbers.readNumber);
   // parser.extend('readFullRadixNumber', readNumbers.readRadixNumber);
+  parser.extend('skipBlockComment', skipBlockComment);
+  parser.extend('skipSpace', skipSpace);
 };
