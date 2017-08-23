@@ -9,7 +9,7 @@
     "test:watch": "npm test -- --watch",
     "test:examples": "node examples/",
     "cover": "cross-env BABEL_ENV=commonjs istanbul cover _mocha -- --compilers js:babel-register --recursive",
-    "lint": "eslint src test",
+    "lint": "standard",
     "build": "cross-env BABEL_ENV=commonjs babel src --out-dir lib",
     "prepublish": "npm run clean && npm run lint && npm run test && npm run build"
   },
@@ -44,14 +44,10 @@
     "babel-preset-stage-2": "^6.24.1",
     "chai": "^4.1.1",
     "cross-env": "^5.0.5",
-    "eslint": "^4.5.0",
-    "eslint-config-airbnb": "^15.1.0",
-    "eslint-plugin-import": "^2.7.0",
-    "eslint-plugin-jsx-a11y": "^6.0.2",
-    "eslint-plugin-react": "^7.3.0",
     "istanbul": "^1.0.0-alpha",
     "mocha": "^3.5.0",
-    "rimraf": "^2.6.1"
+    "rimraf": "^2.6.1",
+    "standard": "^10.0.3"
   },
   "dependencies": {
     "acorn": "^5.1.1",
@@ -65,5 +61,10 @@
   },
   "bin": {
     "hatp": "bin/hatp"
+  },
+  "standard": {
+    "ignore": [
+      "examples/built/"
+    ]
   }
 }
