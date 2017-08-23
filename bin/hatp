@@ -3,83 +3,83 @@
 /* eslint-disable no-param-reassign, no-console */
 /* eslint import/no-extraneous-dependencies: ["error", {"devDependencies": true}] */
 
-const cmder = require('commander');
-const glob = require('glob');
-const packageJson = require('../package.json');
-const outputFileSync = require('output-file-sync');
-const readdir = require('fs-readdir-recursive');
-const path = require('path');
-const fs = require('fs');
-const convert = require('../lib');
+const cmder = require('commander')
+const glob = require('glob')
+const packageJson = require('../package.json')
+const outputFileSync = require('output-file-sync')
+const readdir = require('fs-readdir-recursive')
+const path = require('path')
+const fs = require('fs')
+const convert = require('../lib')
 
-function batchTp(commander, filenames) {
-  function canCompile(filename, ext) {
-    const fileExt = path.extname(filename);
-    return fileExt === ext;
+function batchTp (commander, filenames) {
+  function canCompile (filename, ext) {
+    const fileExt = path.extname(filename)
+    return fileExt === ext
   }
 
-  function chmod(src, dest) {
-    fs.chmodSync(dest, fs.statSync(src).mode);
+  function chmod (src, dest) {
+    fs.chmodSync(dest, fs.statSync(src).mode)
   }
 
-  function transform(filename, code, opts) {
-    opts.filename = filename;
-    const result = {};
-    result.code = convert(code, opts);
-    result.filename = filename;
-    return result;
+  function transform (filename, code, opts) {
+    opts.filename = filename
+    const result = {}
+    result.code = convert(code, opts)
+    result.filename = filename
+    return result
   }
 
-  function compile(filename, opts) {
+  function compile (filename, opts) {
     try {
-      const code = fs.readFileSync(filename, 'utf8');
-      return transform(filename, code, opts);
+      const code = fs.readFileSync(filename, 'utf8')
+      return transform(filename, code, opts)
     } catch (err) {
-      throw err;
+      throw err
     }
   }
 
-  function write(src, relative) {
+  function write (src, relative) {
     // remove extension and then append back on .js
-    relative = `${relative.replace(/\.(\w*?)$/, '')}.js`;
+    relative = `${relative.replace(/\.(\w*?)$/, '')}.js`
 
-    const dest = path.join(commander.outDir, relative);
+    const dest = path.join(commander.outDir, relative)
 
-    const data = compile(src, commander.opts);
+    const data = compile(src, commander.opts)
 
-    outputFileSync(dest, data.code);
-    chmod(src, dest);
+    outputFileSync(dest, data.code)
+    chmod(src, dest)
 
-    console.log(`${src} -> ${dest}`);
+    console.log(`${src} -> ${dest}`)
   }
 
-  function handleFile(src, filename) {
+  function handleFile (src, filename) {
     if (canCompile(filename, commander.extension)) {
-      write(src, filename);
+      write(src, filename)
     } else if (commander.copyFiles) {
-      const dest = path.join(commander.outDir, filename);
-      outputFileSync(dest, fs.readFileSync(src));
-      chmod(src, dest);
+      const dest = path.join(commander.outDir, filename)
+      outputFileSync(dest, fs.readFileSync(src))
+      chmod(src, dest)
     }
   }
 
-  function handle(filename) {
-    if (!fs.existsSync(filename)) return;
+  function handle (filename) {
+    if (!fs.existsSync(filename)) return
 
-    const stat = fs.statSync(filename);
+    const stat = fs.statSync(filename)
 
     if (stat.isDirectory(filename)) {
-      const dirname = filename;
+      const dirname = filename
 
       readdir(dirname).forEach((fn) => {
-        const src = path.join(dirname, fn);
-        handleFile(src, fn);
-      });
+        const src = path.join(dirname, fn)
+        handleFile(src, fn)
+      })
     } else {
-      write(filename, filename);
+      write(filename, filename)
     }
   }
-  filenames.forEach(handle);
+  filenames.forEach(handle)
 }
 
 cmder
@@ -89,8 +89,8 @@ cmder
   .option('-c, --opts [opts]', 'Options to hatp')
   .option('-o, --out-dir [outDir]', 'Directory to output')
   .option('-c, --copy-files', 'Copy files which don\'t need to be compiled')
-  .parse(process.argv);
+  .parse(process.argv)
 
-const filenames = glob.sync(cmder.glob);
+const filenames = glob.sync(cmder.glob)
 
-batchTp(cmder, filenames);
+batchTp(cmder, filenames)
